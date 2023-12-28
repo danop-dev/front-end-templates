@@ -1,4 +1,6 @@
-# React + TypeScript + Vite
+
+<h1 align="center">React | TypeScript | Vite | Redux | Toolkit | Axios | React Router</h1>
+<p align="center">
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -30,21 +32,30 @@ export default {
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
 
+## Getting Started
+```
+  # Install dependencies
+  npm install
 
-- build Docker image
-## docker build -t docker-app .
+  # Run the app
+  npm run dev
+```
 
-- run Docker image
-## docker run --name docker-app -p 5173:5173 -d docker-app
+## Docker
+```
+  # build Docker image
+  docker build -t docker-app .
+
+  # run Docker image
+  docker run --name docker-app -p 5173:5173 -d docker-app
+```
 
 
-
-# Project Structure
+## Project Structure
 
 This project is a front-end template using React and Vite. Below is the structure of the directories and files:
 
-front-end-template
-
+```
 ├── .vscode                               # VSCode settings (optional)
 ├── node_modules                          # Node modules
 ├── public                                # Static public assets (not imported anywhere in source code)
@@ -112,3 +123,4 @@ front-end-template
 ├── tsconfig.json
 ├── tsconfig.node.json
 └── vite.config.ts
+```
