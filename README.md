@@ -1,5 +1,5 @@
 
-<h1 align="center">React | TypeScript | Vite | Redux | Toolkit | Axios | React Router</h1>
+<h1 align="center">React | TypeScript | Vite</h1>
 <p align="center">
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -125,6 +125,18 @@ This project is a front-end template using React and Vite. Below is the structur
 └── vite.config.ts
 ```
 
+## Technologies
+
+| Package               | Description                                    | Docs                                                                            |
+| --------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------- |
+| Data Fetching         | Redux Toolkit                                  | [Docs](hhttps://redux-toolkit.js.org/rtk-query/overview)                        |
+| HTTP Client           | Axios                                          | [Docs](https://axios-http.com/docs/intro)                                       |
+| Form                  | React Hook Form                                | [Docs](https://react-hook-form.com/)                                            |
+| Validation            | Yup                                            | [Docs](https://github.com/jquense/yup)                                          |
+| Routing               | React Router                                   | [Docs](https://reactrouter.com/)                                                |
+| TypeScript            | TypeScript                                     | [Docs](https://create-react-app.dev/docs/adding-typescript/)                    |
+| Frontend Tooling      | Vite                                           | [Docs](https://vitejs.dev/)                                                     |
+
 
 ## Documentation and Resources
 
@@ -187,7 +199,7 @@ export const userRoles = {
 `routesConfig` is an array of objects, each of which represents a route. Each route object has the following properties (key is a type of user role and value is a route object):
 
 ```javascript
-export const routesConfig = {
+export const routesConfig: Record<number, RouteConfig[]> = {
   [userRoles.ROLE_PUBLIC]: [
     {
       path: '/login',
@@ -243,3 +255,86 @@ export const routesConfig = {
 };
 ```
 
+### Configuring Store (Redux)
+
+#### 1. Add new slice to store:
+Create new slice in `src/store/actions` folder (all slice actions):
+
+Example:
+```javascript
+import { userRoles } from "@/utils/constants";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
+interface Example {
+  example: any;
+}
+
+const initialState: Example = {
+  example: null,
+};
+
+export const exampleSlice = createSlice({
+  name: "example",
+  initialState,
+  reducers: {
+    setExample: (state, action: PayloadAction<any>) => {
+      state.example = action.payload;
+    },
+  },
+});
+
+export const userReducer = exampleSlice.reducer;
+export const userActions = exampleSlice.actions;
+```
+
+#### 2. Add new slice to `src/store/hooks/useActions.ts`:
+```javascript
+import { bindActionCreators } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+
+import { userActions } from "@/store/actions/userSlice";
+import { exampleActions } from "@/store/actions/exampleSlice";
+
+const allActions = {
+  ...userActions,
+  ...exampleActions,
+};
+
+export const useActions = () => {
+  const dispatch = useDispatch();
+
+  return bindActionCreators(allActions, dispatch);
+};
+```
+
+#### 3. Add new slice to `src/store/rootReducer.ts`:
+```javascript
+export const rootReducer = combineReducers({
+  [api.reducerPath]: api.reducer,
+  user: userReducer,
+  example: exampleReducer,
+});
+```
+
+#### 4. Import and use new slice in component:
+```javascript
+import { useActions } from "@/store/hooks/useActions";
+import { useAppSelector } from "@/store/hooks/useAppSelector";
+
+const Example = () => {
+  const { example } = useAppSelector((state) => state.example);
+  const { setExample } = useActions();
+
+  const handleSetExample = () => {
+    setExample("example");
+  };
+
+  return (
+    <div>
+      <p>{example}</p>
+      <button onClick={handleSetExample}>Set example</button>
+    </div>
+  );
+};
+```
