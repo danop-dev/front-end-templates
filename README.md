@@ -136,6 +136,9 @@ This project is a front-end template using React and Vite. Below is the structur
 | Routing               | React Router                                   | [Docs](https://reactrouter.com/)                                                |
 | TypeScript            | TypeScript                                     | [Docs](https://create-react-app.dev/docs/adding-typescript/)                    |
 | Frontend Tooling      | Vite                                           | [Docs](https://vitejs.dev/)                                                     |
+| Code Formatting       | Prettier                                       | [Docs](https://prettier.io/)                                                    |
+| Linting               | ESLint                                         | [Docs](https://eslint.org/)                                                     |
+| Styling               | SCSS                                           | [Docs](https://sass-lang.com/documentation)                                     |
 
 
 ## Documentation and Resources
