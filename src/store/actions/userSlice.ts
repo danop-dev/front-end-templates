@@ -34,9 +34,11 @@ export const userSlice = createSlice({
       state.isAuthorize = action.payload;
     },
     logOut: (state) => {
-      state.user = null;
+      state.role = userRoles.ROLE_PUBLIC;
       state.isAuthorize = false;
+      state.user = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("isAuthorized");
     },
     setRole: (state, action: PayloadAction<number>) => {
       state.role = action.payload;

@@ -1,32 +1,20 @@
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-
+import { useState } from 'react';
+import { Button, Form, Input } from 'antd';
 import { useActions } from '@/store/hooks/useActions';
 import { useRegisterMutation } from '@/store/api/authApi';
 
-interface FormValues {
+interface FieldType {
   username: string;
   password: string;
   passwordRepeat: string;
 }
 
-const schema = yup.object().shape({
-  username: yup.string().required('Username is required').min(3, 'Username must be at least 3 characters'),
-  password: yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
-  passwordRepeat: yup.string().oneOf([yup.ref('password')], 'Passwords must match')
-});
-
 const RegisterPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
-    resolver: yupResolver(schema) as any
-  });
   const [registerUser, { isLoading }] = useRegisterMutation();
   const { setCredentials, setRole } = useActions();
+  const [visibilityPsw, setVisibilityPsw] = useState(false);
 
-  const onSubmit = (data: FormValues) => {
-    // Handle form submission
-    console.log(data);
+  const onFinish = (data: FieldType) => {
     registerUser(data)
       .unwrap()
       .then((res) => {
@@ -42,21 +30,75 @@ const RegisterPage = () => {
       });
   };
 
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("username")} placeholder="username" />
-      {errors.username && <p>{errors.username.message}</p>}
+    <Form
+      name="basic"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item<FieldType>
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input />
+      </Form.Item>
 
-      <input {...register("password")} type="password" placeholder="password" />
-      {errors.password && <p>{errors.password.message}</p>}
+      <Form.Item<FieldType>
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password
+          visibilityToggle={{
+            visible: visibilityPsw,
+            onVisibleChange: setVisibilityPsw
+          }}
+        />
+      </Form.Item>
 
-      <input {...register("passwordRepeat")} type="password" placeholder="repeat password" />
-      {errors.passwordRepeat && <p>{errors.passwordRepeat.message}</p>}
+      <Form.Item<FieldType>
+        label="Confirm Password"
+        name="passwordRepeat"
+        rules={[
+          {
+            required: true,
+            message: 'Please confirm your password!'
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue('password') === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('The two passwords that you entered do not match!'));
+            },
+          }),
+        ]}
+      >
+        <Input.Password
+          visibilityToggle={{
+            visible: visibilityPsw,
+            onVisibleChange: setVisibilityPsw
+          }}
+        />
+      </Form.Item>
 
-      <button type="submit">
-        {isLoading ? "Register..." : "Register"}
-      </button>
-    </form>
+      <Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          disabled={isLoading}
+          loading={isLoading}
+        >
+          Register
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

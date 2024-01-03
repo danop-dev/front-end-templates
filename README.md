@@ -131,14 +131,15 @@ This project is a front-end template using React and Vite. Below is the structur
 | --------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------- |
 | Data Fetching         | Redux Toolkit                                  | [Docs](hhttps://redux-toolkit.js.org/rtk-query/overview)                        |
 | HTTP Client           | Axios                                          | [Docs](https://axios-http.com/docs/intro)                                       |
-| Form                  | React Hook Form                                | [Docs](https://react-hook-form.com/)                                            |
-| Validation            | Yup                                            | [Docs](https://github.com/jquense/yup)                                          |
 | Routing               | React Router                                   | [Docs](https://reactrouter.com/)                                                |
 | TypeScript            | TypeScript                                     | [Docs](https://create-react-app.dev/docs/adding-typescript/)                    |
 | Frontend Tooling      | Vite                                           | [Docs](https://vitejs.dev/)                                                     |
 | Code Formatting       | Prettier                                       | [Docs](https://prettier.io/)                                                    |
 | Linting               | ESLint                                         | [Docs](https://eslint.org/)                                                     |
 | Styling               | SCSS                                           | [Docs](https://sass-lang.com/documentation)                                     |
+| UI Library            | And Design v5                                  | [Docs](https://ant.design/)                                                     |
+| Form                  | And Design Form Component                      | [Docs](https://ant.design/components/form)                                      |
+| Icons                 | React Icons                                    | [Docs](https://react-icons.github.io/react-icons/)                              |
 
 
 ## Documentation and Resources
@@ -230,7 +231,7 @@ export const routesConfig: Record<number, RouteConfig[]> = {
     },
     {
       path: '/dashboard',
-      element: <Dashboard />,
+      element: <DashboardPage />,
     },
     {
       path: '/404',

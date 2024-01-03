@@ -1,29 +1,18 @@
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from "react-hook-form";
-
+import { Button, Form, Input } from 'antd';
 import { useLoginMutation } from "@/store/api/authApi";
 import { useActions } from "@/store/hooks/useActions";
 
-type FormValues = {
-  username: string
-  password: string
+type FieldType = {
+  username?: string;
+  password?: string;
 };
 
-const schema = yup.object().shape({
-  username: yup.string().required('Username is required').min(3, 'Username must be at least 3 characters'),
-  password: yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
-});
-
 const LoginPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
-    resolver: yupResolver(schema) as any
-  });
 
   const [login, { isLoading }] = useLoginMutation();
   const { setCredentials, setRole } = useActions();
 
-  const onSubmit = handleSubmit((data) => {
+  const onFinish = (data: any) => {
     login(data)
       .unwrap()
       .then((res) => {
@@ -36,19 +25,46 @@ const LoginPage = () => {
       .finally(() => {
         console.log("finally");
       });
-  });
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
 
   return (
-    <form onSubmit={onSubmit}>
-      <input {...register("username")} placeholder="username" />
+    <Form
+      name="basic"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item<FieldType>
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input />
+      </Form.Item>
 
-      <input type="password" {...register("password")} placeholder="*******" />
-      {errors?.password && <p>{errors.password.message}</p>}
+      <Form.Item<FieldType>
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password />
+      </Form.Item>
 
-      <button type="submit">
-        {isLoading ? "Loading..." : "Login"}
-      </button>
-    </form>
+      <Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          disabled={isLoading}
+          loading={isLoading}
+        >
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

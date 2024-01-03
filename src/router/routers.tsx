@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import {
   LoginPage,
   RegisterPage,
-  Dashboard
+  DashboardPage
 } from "@/pages";
 
 interface RouteConfig {
@@ -54,7 +54,7 @@ export const routesConfig: Record<number, RouteConfig[]> = {
   [userRoles.ROLE_PRIVATE]: [
     {
       path: '/dashboard',
-      element: <Dashboard />
+      element: <DashboardPage />
     },
     {
       path: '*',
@@ -64,7 +64,7 @@ export const routesConfig: Record<number, RouteConfig[]> = {
   [userRoles.ROLE_ADMIN]: [
     {
       path: '/dashboard',
-      element: <Dashboard />
+      element: <DashboardPage />
     },
     {
       path: '*',
